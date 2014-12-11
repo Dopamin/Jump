@@ -73,8 +73,6 @@ public class Player {
 
 		getInput();
 		calculatePosition();
-
-		Log.e("hadkf", "going right " + goingRight);
 	}
 
 	public void render(Canvas g) {
