@@ -30,7 +30,7 @@ public class Player {
 	private float jumpHeight = baseJumpHeight; // amplituda
 
 	public Player() {
-		pos = new Vector2f(50, 600);
+		pos = new Vector2f(50, 790);
 		size = new Vector2f(50, 50);
 
 		start = 50;

@@ -47,7 +47,7 @@ public class Ramp {
 
 		float angle = ((time - rampRotationTime / 2.0f) / (rampRotationTime / 2.0f)) * 3.14f;
 		holeHeight = middle + ((float) Math.sin(angle)) * (maxHoleHeightDelta / 2);
-		Log.e("hello", angle + " ");
+
 
 		calculatePositions();
 	}
