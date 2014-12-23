@@ -52,12 +52,12 @@ public class MyCanvas extends SurfaceView implements Runnable {
     @SuppressLint("ClickableViewAccessibility")
     @SuppressWarnings("deprecation")
     private void init() {
-
+        Images.init(context);
         game = new Game();
 
         canvas = this;
         ourHolder = getHolder();
-        Images.init(context);
+
 
         input = new Input();
         setOnTouchListener(input);
@@ -131,7 +131,7 @@ public class MyCanvas extends SurfaceView implements Runnable {
                 render(canvas);
                 frames++;
                 if (System.currentTimeMillis() - timer > 1000) {
-                    //Log.e("Running ", "fps: " + frames + "| ups:" + updates);
+                    Log.e("Running ", "fps: " + frames + "| ups:" + updates);
                     timer += 1000;
                     frames = updates;
                     updates = frames;
@@ -144,11 +144,14 @@ public class MyCanvas extends SurfaceView implements Runnable {
         }
     }
 
-    private void update() { game.update(); }
+    private void update() {
+        game.update();
+    }
 
     private void render(Canvas canvas) {
         canvas.scale(1 / scaleX, 1 / scaleY);
         game.render(canvas);
+
     }
 
 }
