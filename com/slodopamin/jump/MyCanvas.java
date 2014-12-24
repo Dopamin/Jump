@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.slodopamin.jump.game.Game;
 import com.slodopamin.jump.input.Input;
@@ -18,14 +19,13 @@ import com.slodopamin.jump.resources.Images;
 /**
  * @author Ziga Vene, zvene28@gmail.com
  */
-public class MyCanvas extends SurfaceView implements Runnable {
+public class MyCanvas extends View implements Runnable {
 
-    private SurfaceHolder ourHolder;
+
     private Thread thread;
     public boolean running = false;
-
+    public Canvas canvas = null;
     public MainActivity context;
-    public static MyCanvas canvas;
 
     public static int screenWidth, screentHeight;
     public static float scaleX;
@@ -55,10 +55,6 @@ public class MyCanvas extends SurfaceView implements Runnable {
         Images.init(context);
         game = new Game();
 
-        canvas = this;
-        ourHolder = getHolder();
-
-
         input = new Input();
         setOnTouchListener(input);
 
@@ -79,18 +75,7 @@ public class MyCanvas extends SurfaceView implements Runnable {
         thread.start();
     }
 
-    public void stop() {
-        running = false;
-
-        while (true) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            break;
-        }
-    }
+    int frames = 0;
 
     @SuppressWarnings("static-access")
     @Override
@@ -100,46 +85,24 @@ public class MyCanvas extends SurfaceView implements Runnable {
         long timer = System.currentTimeMillis();
         final double ns = 1000000000.0 / 60.0;
         double delta = 0;
-        int frames = 0;
+
         int updates = 0;
         while (running) {
-            long now = System.nanoTime();
-
-            delta += (now - lastTime) / ns;
-
-            try {
-                thread.sleep(2);
-                thread.yield();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (!ourHolder.getSurface().isValid())
-                continue;
-
-            Canvas canvas = ourHolder.lockCanvas();
-
-            if (canvas != null) {
-                canvas.drawRGB(0, 0, 0);
-
+            while (true) {
+                long now = System.nanoTime();
+                delta += (now - lastTime) / ns;
                 lastTime = now;
                 while (delta >= 1) {
                     updates++;
                     delta--;
                     update();
                 }
-                render(canvas);
-                frames++;
                 if (System.currentTimeMillis() - timer > 1000) {
-                    Log.e("Running ", "fps: " + frames + "| ups:" + updates);
+                    Log.e("A:", "" + frames + " --- " + updates);
                     timer += 1000;
-                    frames = updates;
-                    updates = frames;
                     updates = 0;
                     frames = 0;
                 }
-
-                ourHolder.unlockCanvasAndPost(canvas);
             }
         }
     }
@@ -148,10 +111,11 @@ public class MyCanvas extends SurfaceView implements Runnable {
         game.update();
     }
 
-    private void render(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
         canvas.scale(1 / scaleX, 1 / scaleY);
         game.render(canvas);
-
+        invalidate();
     }
-
 }
