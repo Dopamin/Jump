@@ -15,6 +15,7 @@ import android.view.View;
 import com.slodopamin.jump.game.Game;
 import com.slodopamin.jump.input.Input;
 import com.slodopamin.jump.resources.Images;
+import com.slodopamin.jump.sound.SoundPlayer;
 
 /**
  * @author Ziga Vene, zvene28@gmail.com
@@ -32,8 +33,9 @@ public class MyCanvas extends View implements Runnable {
     public static float scaleY;
 
     private Game game;
-
+    public static SoundPlayer soundplayer;
     private Input input;
+
 
     public MyCanvas(Context context) {
         super(context);
@@ -53,8 +55,8 @@ public class MyCanvas extends View implements Runnable {
     @SuppressWarnings("deprecation")
     private void init() {
         Images.init(context);
-        game = new Game();
-
+        soundplayer = new SoundPlayer();
+        soundplayer.init(context);
         input = new Input();
         setOnTouchListener(input);
 
@@ -65,6 +67,7 @@ public class MyCanvas extends View implements Runnable {
         scaleX = (float) 480 / (float) screenWidth;
         scaleY = (float) 800 / (float) screentHeight;
 
+        game = new Game();
     }
 
     public void start() {

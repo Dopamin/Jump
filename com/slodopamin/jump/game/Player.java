@@ -1,9 +1,12 @@
 
 package com.slodopamin.jump.game;
 
+import com.slodopamin.jump.MyCanvas;
+import com.slodopamin.jump.R;
 import com.slodopamin.jump.input.Input;
 import com.slodopamin.jump.math.Vector2f;
 import com.slodopamin.jump.resources.Images;
+import com.slodopamin.jump.sound.SoundPlayer;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,7 +33,7 @@ public class Player {
 
     private boolean goingRight = true;
 
-    private float baseJumpHeight = 150; // amplituda
+    private float baseJumpHeight = 200; // amplituda
     private float jumpHeight = baseJumpHeight; // amplituda
 
     Bitmap img;
@@ -78,7 +81,10 @@ public class Player {
             jumpHeight = baseJumpHeight;
             currentTime = 0;
             goingRight = !goingRight;
+            //increase score
             Game.score++;
+            //play sound
+            MyCanvas.soundplayer.playJumpSound();
         }
 
         getInput();
